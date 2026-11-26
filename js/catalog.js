@@ -1,42 +1,63 @@
-import { products } from './data.js';
-import { addToCart, readStorage, toggleFavorite, FAVORITES_KEY } from './main.js';
-import { openProductDialog } from './modal.js';
+const productsContainer = document.querySelector('#products');
+const searchInput = document.querySelector('#search-input');
+const categoryFilter = document.querySelector('#category-filter');
+const sortSelect = document.querySelector('#sort-select');
+const productsCount = document.querySelector('#products-count');
+const emptyMessage = document.querySelector('#empty-message');
 
-const grid = document.querySelector('[data-products]');
-const search = document.querySelector('[data-search]');
-const category = document.querySelector('[data-category]');
-const sort = document.querySelector('[data-sort]');
-const count = document.querySelector('[data-result-count]');
+function createProductCard(product) {
+  const article = document.createElement('article');
+  article.classList.add('product-card');
 
-function createCard(product) {
-  const card = document.createElement('article');
-  card.className = 'product-card';
   const image = document.createElement('img');
-  image.className = 'product-card__image'; image.src = product.image; image.alt = product.title; image.loading = 'lazy';
-  const body = document.createElement('div'); body.className = 'product-card__body';
-  const meta = document.createElement('p'); meta.className = 'product-card__meta'; meta.textContent = `${product.category} · ★ ${product.rating}`;
-  const title = document.createElement('h2'); title.className = 'product-card__title'; title.textContent = product.title;
-  const description = document.createElement('p'); description.className = 'product-card__description'; description.textContent = product.description;
-  const price = document.createElement('p'); price.className = 'product-card__price'; price.textContent = `${product.price.toLocaleString('ru-RU')} ₽`;
-  const actions = document.createElement('div'); actions.className = 'product-card__actions';
-  const details = document.createElement('a'); details.className = 'button button--ghost'; details.href = `product.html?id=${product.id}`; details.textContent = 'Подробнее';
-  const preview = document.createElement('button'); preview.className = 'link-button'; preview.type = 'button'; preview.textContent = 'Быстрый просмотр'; preview.addEventListener('click', () => openProductDialog(product));
-  const buy = document.createElement('button'); buy.className = 'button'; buy.type = 'button'; buy.textContent = product.isAvailable ? 'В корзину' : 'Нет в наличии'; buy.disabled = !product.isAvailable;
-  buy.addEventListener('click', () => addToCart(product.id));
-  const favorite = document.createElement('button'); favorite.className = 'favorite'; favorite.type = 'button';
-  const paintFavorite = () => { favorite.textContent = readStorage(FAVORITES_KEY).includes(product.id) ? '♥' : '♡'; favorite.setAttribute('aria-label', 'Добавить в избранное'); };
-  favorite.addEventListener('click', () => { toggleFavorite(product.id); paintFavorite(); }); paintFavorite();
-  actions.append(details, buy, favorite, preview); body.append(meta, title, description, price, actions); card.append(image, body); return card;
+  image.classList.add('product-card__image');
+  image.src = product.image;
+  image.alt = product.title;
+
+  const title = document.createElement('h2');
+  title.classList.add('product-card__title');
+  title.textContent = product.title;
+
+  const price = document.createElement('p');
+  price.classList.add('product-card__price');
+  price.textContent = `${product.price.toLocaleString('ru-RU')} руб.`;
+
+  const status = document.createElement('p');
+  status.textContent = product.isAvailable ? 'В наличии' : 'Нет в наличии';
+
+  const button = document.createElement('button');
+  button.classList.add('button');
+  button.type = 'button';
+  button.textContent = 'Подробнее';
+  button.addEventListener('click', () => openProductModal(product));
+
+  article.append(image, title, price, status, button);
+  return article;
 }
 
-function render() {
-  if (!grid) return;
-  const query = search.value.trim().toLowerCase();
-  let result = products.filter((item) => item.title.toLowerCase().includes(query) && (!category.value || item.category === category.value));
-  result = [...result].sort((a, b) => sort.value === 'price-asc' ? a.price - b.price : sort.value === 'price-desc' ? b.price - a.price : sort.value === 'name' ? a.title.localeCompare(b.title, 'ru') : b.rating - a.rating);
-  grid.replaceChildren(); count.textContent = `Найдено: ${result.length}`;
-  if (!result.length) { const empty = document.createElement('p'); empty.className = 'empty-state'; empty.textContent = 'По вашему запросу ничего не найдено. Измените фильтры.'; grid.append(empty); return; }
-  result.forEach((product) => grid.append(createCard(product)));
+function renderProducts() {
+  const searchValue = searchInput.value.trim().toLowerCase();
+  const categoryValue = categoryFilter.value;
+  const sortValue = sortSelect.value;
+
+  let filteredProducts = products.filter((product) => {
+    const matchesSearch = product.title.toLowerCase().includes(searchValue);
+    const matchesCategory = categoryValue === 'all' || product.category === categoryValue;
+    return matchesSearch && matchesCategory;
+  });
+
+  if (sortValue === 'price-asc') filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
+  if (sortValue === 'price-desc') filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
+  if (sortValue === 'title') filteredProducts = [...filteredProducts].sort((a, b) => a.title.localeCompare(b.title, 'ru'));
+
+  productsContainer.replaceChildren();
+  filteredProducts.forEach((product) => productsContainer.append(createProductCard(product)));
+  productsCount.textContent = `Найдено товаров: ${filteredProducts.length}`;
+  emptyMessage.hidden = filteredProducts.length !== 0;
 }
-[search, category, sort].forEach((control) => control?.addEventListener(control === search ? 'input' : 'change', render));
-render();
+
+searchInput.addEventListener('input', renderProducts);
+categoryFilter.addEventListener('change', renderProducts);
+sortSelect.addEventListener('change', renderProducts);
+renderProducts();
+

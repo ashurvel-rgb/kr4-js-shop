@@ -1,12 +1,31 @@
-const form = document.querySelector('[data-order-form]');
-const validators = {
-  name: (value) => value.trim().length >= 2 ? '' : 'Введите не менее двух символов.',
-  email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Введите корректный e-mail.',
-  phone: (value) => /^\+?[\d\s()-]{10,}$/.test(value) ? '' : 'Введите корректный телефон.',
-  consent: (_, field) => field.checked ? '' : 'Подтвердите согласие.'
-};
-function validate(field) { const message = validators[field.name]?.(field.value, field) ?? ''; const error = form.querySelector(`[data-error-for="${field.name}"]`); error.textContent = message; field.setAttribute('aria-invalid', String(Boolean(message))); return !message; }
-form?.querySelectorAll('input, textarea, select').forEach((field) => field.addEventListener('blur', () => validate(field)));
-form?.addEventListener('submit', (event) => { event.preventDefault(); const fields = [...form.querySelectorAll('[name]')]; if (!fields.every(validate)) return; form.reset(); document.querySelector('[data-form-success]').hidden = false; localStorage.removeItem('kr4-order-draft'); });
-form?.addEventListener('input', () => { const draft = Object.fromEntries(new FormData(form)); localStorage.setItem('kr4-order-draft', JSON.stringify(draft)); });
+const orderForm = document.querySelector('#order-form');
+const successMessage = document.querySelector('#success-message');
+
+function showError(fieldName, message) {
+  document.querySelector(`#${fieldName}-error`).textContent = message;
+}
+
+function clearErrors() {
+  document.querySelectorAll('.form-error').forEach((element) => { element.textContent = ''; });
+}
+
+orderForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  clearErrors();
+  successMessage.textContent = '';
+
+  const name = orderForm.elements.name.value.trim();
+  const email = orderForm.elements.email.value.trim();
+  const phone = orderForm.elements.phone.value.trim();
+  let isValid = true;
+
+  if (name.length < 2) { showError('name', 'Введите имя не короче двух символов.'); isValid = false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'Введите корректный e-mail.'); isValid = false; }
+  if (!/^\+?[\d\s()-]{10,}$/.test(phone)) { showError('phone', 'Введите корректный номер телефона.'); isValid = false; }
+
+  if (isValid) {
+    successMessage.textContent = 'Заявка подготовлена. Мы свяжемся с вами.';
+    orderForm.reset();
+  }
+});
 
