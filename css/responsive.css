@@ -1,3 +1,30 @@
-@media(max-width:800px){.products-grid{grid-template-columns:repeat(2,1fr)}.controls{grid-template-columns:1fr}.header-inner{align-items:flex-start;padding:14px 0}.site-nav{flex-wrap:wrap}}
-@media(max-width:520px){.products-grid{grid-template-columns:1fr}.site-nav{margin-left:0}.header-inner{display:block}.logo{display:block;margin-bottom:10px}}
-
+@media (max-width: 800px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .controls {
+    grid-template-columns: 1fr;
+  }
+  .header-inner {
+    align-items: flex-start;
+    padding: 14px 0;
+  }
+  .site-nav {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 520px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  .site-nav {
+    margin-left: 0;
+  }
+  .header-inner {
+    display: block;
+  }
+  .logo {
+    display: block;
+    margin-bottom: 10px;
+  }
+}

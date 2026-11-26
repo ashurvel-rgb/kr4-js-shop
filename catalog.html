@@ -1,2 +1,66 @@
-<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Каталог</title><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/responsive.css"><script src="js/data.js" defer></script><script src="js/modal.js" defer></script><script src="js/catalog.js" defer></script></head><body><header class="site-header"><div class="container header-inner"><a class="logo" href="index.html">Учебный магазин</a><nav class="site-nav"><a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a href="cart.html">Корзина</a><a href="order.html">Заявка</a><a href="contacts.html">Контакты</a></nav></div></header><main class="section"><div class="container"><h1>Каталог товаров</h1><div class="controls"><label>Поиск<input id="search-input" type="search" placeholder="Введите название"></label><label>Категория<select id="category-filter"><option value="all">Все категории</option><option value="sport">Спортивные</option><option value="outerwear">Верхняя одежда</option><option value="casual">Повседневные</option></select></label><label>Сортировка<select id="sort-select"><option value="default">По умолчанию</option><option value="price-asc">Цена: по возрастанию</option><option value="price-desc">Цена: по убыванию</option><option value="title">По названию</option></select></label></div><p id="products-count"></p><p id="empty-message" class="empty-message" hidden>По вашему запросу ничего не найдено.</p><div id="products" class="products-grid"></div></div></main><dialog id="product-dialog" class="product-dialog"><h2 id="dialog-title"></h2><p id="dialog-price"></p><p id="dialog-status"></p><button id="close-dialog" class="button" type="button">Закрыть</button></dialog><footer class="site-footer"><div class="container">Учебный проект</div></footer></body></html>
-
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Каталог</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <script src="js/data.js" defer></script>
+    <script src="js/modal.js" defer></script>
+    <script src="js/catalog.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="index.html">Учебный магазин</a>
+        <nav class="site-nav">
+          <a href="index.html">Главная</a><a href="catalog.html">Каталог</a
+          ><a href="cart.html">Корзина</a><a href="order.html">Заявка</a
+          ><a href="contacts.html">Контакты</a>
+        </nav>
+      </div>
+    </header>
+    <main class="section">
+      <div class="container">
+        <h1>Каталог товаров</h1>
+        <div class="controls">
+          <label
+            >Поиск<input
+              id="search-input"
+              type="search"
+              placeholder="Введите название" /></label
+          ><label
+            >Категория<select id="category-filter">
+              <option value="all">Все категории</option>
+              <option value="sport">Спортивные</option>
+              <option value="outerwear">Верхняя одежда</option>
+              <option value="casual">Повседневные</option>
+            </select></label
+          ><label
+            >Сортировка<select id="sort-select">
+              <option value="default">По умолчанию</option>
+              <option value="price-asc">Цена: по возрастанию</option>
+              <option value="price-desc">Цена: по убыванию</option>
+              <option value="title">По названию</option>
+            </select></label
+          >
+        </div>
+        <p id="products-count"></p>
+        <p id="empty-message" class="empty-message" hidden>
+          По вашему запросу ничего не найдено.
+        </p>
+        <div id="products" class="products-grid"></div>
+      </div>
+    </main>
+    <dialog id="product-dialog" class="product-dialog">
+      <h2 id="dialog-title"></h2>
+      <p id="dialog-price"></p>
+      <p id="dialog-status"></p>
+      <button id="close-dialog" class="button" type="button">Закрыть</button>
+    </dialog>
+    <footer class="site-footer">
+      <div class="container">Учебный проект</div>
+    </footer>
+  </body>
+</html>
